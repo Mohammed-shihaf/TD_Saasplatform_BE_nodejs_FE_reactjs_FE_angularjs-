@@ -1,0 +1,11 @@
+tool: nyc
+language: javascript
+language_version: "22"
+technique: "Statement / Branch Coverage"
+target_files: [../../src/]
+run:
+  command: "npx nyc --reporter=text mocha 'test/**/*.test.js'"
+expects:
+  coverage_report_generated: true
+verified_in_session: true
+verified_result: "78.57% stmts / 25% branch / 75% funcs / 83.33% lines against the real app.js; lines 30-31 (the require.main listen() guard, not exercised by the request tests) uncovered"
