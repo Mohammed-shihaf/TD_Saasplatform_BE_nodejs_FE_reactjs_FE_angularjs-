@@ -1,0 +1,12 @@
+tool: eslint-plugin-sonarjs
+language: javascript
+language_version: "22"
+technique: "Code Quality Auditing"
+classification: "Code Smell Detection"
+target_files: [../../src/app.js]
+run:
+  command: "npx eslint src/"
+expects:
+  code_smell_detected: true
+verified_in_session: true
+verified_result: "loaded via plugin:sonarjs/recommended; 0 findings on the real src/app.js"
