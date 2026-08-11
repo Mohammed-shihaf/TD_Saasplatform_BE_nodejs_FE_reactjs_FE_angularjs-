@@ -1,0 +1,41 @@
+BUILD COMMANDS
+===============
+backend:
+  cd backend && npm install && npm test && npm start   # listens on $PORT or 3000
+
+frontend-react (customer app):
+  cd frontend-react && npm install && npm run build      # vite build, real verified
+
+frontend-angular (admin app):
+  cd frontend-angular && npm install && npx ng build && npx ng test --watch=false --browsers=ChromeHeadless
+
+ARCHITECTURE
+============
+Multi-Product SaaS Platform: ONE backend, TWO API namespaces.
+
+  backend/src/app.js
+    GET /api/customer/products   <- public namespace
+    GET /api/admin/products      <- internal namespace (extra fields:
+                                     internalCost, margin)
+    GET /health
+
+  frontend-react/     Customer App (React)
+    - fetches ONLY /api/customer/products
+    - never calls /api/admin/*
+
+  frontend-angular/   Admin App (Angular)
+    - fetches ONLY /api/admin/products
+    - never calls /api/customer/*
+
+The two frontends are connected to the SAME backend but are kept on
+separate API namespaces by convention - a real multi-product SaaS
+platform boundary, not disconnected apps sharing nothing. Contrast
+with the Micro-Frontend Platform (React embeds Angular live via
+iframe) and the Migration Bridge (one backend route-splits between
+stacks) - here the split is by API namespace, not by route or by
+embedding.
+
+  backend/quality/          13 real JS code-quality tool fixtures
+  frontend-angular/quality/ 21 real TypeScript code-quality tool fixtures
+  (no duplication: JS tools live once in backend/, TS tools live once
+  in frontend-angular/; frontend-react connects via real API calls)
