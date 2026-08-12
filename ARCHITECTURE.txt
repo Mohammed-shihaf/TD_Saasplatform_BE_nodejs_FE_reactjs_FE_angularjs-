@@ -1,10 +1,23 @@
 BUILD COMMANDS
 ===============
+Whole-branch build (Turborepo, orchestrates all 3 npm workspaces):
+  npm install
+  npx turbo run build
+  npx turbo run test
+
+SaaS Platform uses Turborepo as its build orchestrator - a real,
+widely-used enterprise choice (Vercel), common among SaaS companies
+running multi-package/multi-app repos. Root package.json declares npm
+workspaces (backend, frontend-react, frontend-angular) and turbo.json
+defines the build/test pipeline; each workspace's own npm scripts run
+under the hood, with real caching keyed off content hashes.
+
+Per-module (still available individually):
 backend:
   cd backend && npm install && npm test && npm start   # listens on $PORT or 3000
 
 frontend-react (customer app):
-  cd frontend-react && npm install && npm run build      # vite build, real verified
+  cd frontend-react && npm install && npm test && npm run build
 
 frontend-angular (admin app):
   cd frontend-angular && npm install && npx ng build && npx ng test --watch=false --browsers=ChromeHeadless
@@ -13,11 +26,11 @@ ARCHITECTURE
 ============
 Multi-Product SaaS Platform: ONE backend, TWO API namespaces.
 
-  backend/src/app.js
-    GET /api/customer/products   <- public namespace
-    GET /api/admin/products      <- internal namespace (extra fields:
-                                     internalCost, margin)
-    GET /health
+  backend/src/routes/customer.js  GET /api/customer/products (public namespace)
+  backend/src/routes/admin.js     GET /api/admin/products (internal, +internalCost/margin)
+  backend/src/routes/plans.js     GET /api/plans, GET /api/plans/:id (shared, non-namespaced)
+  backend/src/data/               products.js, plans.js data layers
+  GET /health
 
   frontend-react/     Customer App (React)
     - fetches ONLY /api/customer/products
