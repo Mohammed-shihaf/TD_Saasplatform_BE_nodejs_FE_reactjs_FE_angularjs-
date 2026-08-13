@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saasplatform-backend
+  labels:
+    app: saasplatform-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: saasplatform-backend
+  template:
+    metadata:
+      labels:
+        app: saasplatform-backend
+    spec:
+      containers:
+        - name: saasplatform-backend
+          image: saasplatform-backend:node22
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: saasplatform-backend
+spec:
+  selector:
+    app: saasplatform-backend
+  ports:
+    - port: 80
+      targetPort: 3000
