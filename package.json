@@ -2,9 +2,17 @@
   "name": "saasplatform-workspace",
   "private": true,
   "version": "1.0.0",
-  "workspaces": ["backend", "frontend-react", "frontend-angular"],
+  "workspaces": [
+    "backend",
+    "frontend-react",
+    "frontend-angular"
+  ],
   "packageManager": "npm@10.9.4",
   "devDependencies": {
     "turbo": "^2.1.3"
+  },
+  "engines": {
+    "node": "18.x",
+    "shell": "bash>=5.2"
   }
 }
