@@ -1,0 +1,12 @@
+tool: lizard
+language: javascript
+language_version: "22"
+technique: "Structural Analysis"
+classification: "Cyclomatic Complexity"
+target_files: [../../src/plans.js]
+run:
+  command: "lizard src/plans.js"
+expects:
+  complexity_report_generated: true
+verified_in_session: true
+verified_result: "real complexity report generated for plans.js; no thresholds exceeded"
